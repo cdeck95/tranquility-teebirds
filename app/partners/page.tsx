@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import birdieLogo from "/public/Birdie.jpg";
-import dickieLogo from "/public/DickieDG.png";
+import birdieLogo from "/public/birdie.jpg";
+import dickieLogo from "/public/dickieDG.png";
 const partners = [
   {
     name: "Birdie Disc Golf Supply Co.",
