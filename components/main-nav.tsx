@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Calendar,
   Users,
-  Bell,
   Search,
   Handshake,
   Mail,
@@ -20,7 +19,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import TeeBirdLogo from "@/public/teebirds logo.jpg";
 import { useState } from "react";
+import Image from "next/image";
 
 const navItems = [
   {
@@ -66,8 +67,14 @@ export function MainNav() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
-        <Link href="/" className="flex items-center space-x-2">
-          <span className="text-lg font-bold sm:text-xl">TeeBirds</span>
+        <Link href="/" className="flex items-center mx-2 space-x-2">
+          <Image
+            src={TeeBirdLogo}
+            alt="Tranquility TeeBirds Logo"
+            width={56}
+            height={56}
+            className="rounded-full cursor-pointer"
+          />
         </Link>
 
         {/* Desktop Navigation */}
