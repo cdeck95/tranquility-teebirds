@@ -2,6 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AnimatedElement } from "@/components/animated-element"; // New animated import
 
 interface TeamMember {
   name: string;
@@ -38,75 +39,80 @@ export default async function TeamPage() {
         </p>
       </div>
 
-      <div className="mb-8 sm:mb-12">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-          Team Captains
-        </h2>
-        <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {captains.map(({ name, pdga }) => (
-            <Card key={name}>
-              <CardHeader>
-                <CardTitle>
-                  <a
-                    href={`https://www.pdga.com/player/${pdga}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {name}
-                  </a>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-square relative mb-4">
-                  <Image
-                    // Use the player's full name from the public folder with .jpg extension.
-                    src={`/${name}.jpg`}
-                    alt={name}
-                    fill
-                    className="object-cover rounded-lg"
-                  />
-                </div>
-                <p className="text-sm text-muted-foreground">Team Captain</p>
-              </CardContent>
-            </Card>
-          ))}
+      <AnimatedElement delay={0.2}>
+        <div className="mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+            Team Captains
+          </h2>
+          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {captains.map(({ name, pdga }) => (
+              <Card key={name}>
+                <CardHeader>
+                  <CardTitle>
+                    <a
+                      href={`https://www.pdga.com/player/${pdga}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {name}
+                    </a>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="aspect-square relative mb-4">
+                    <Image
+                      // Use the player's full name from the public folder with .jpg extension.
+                      src={`/${name}.jpg`}
+                      alt={name}
+                      loading="lazy"
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground">Team Captain</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
+      </AnimatedElement>
 
-      <div>
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
-          Team Players
-        </h2>
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          {players.map(({ name, pdga }) => (
-            <Card key={name}>
-              <CardHeader>
-                <CardTitle className="text-base sm:text-lg">
-                  <a
-                    href={`https://www.pdga.com/player/${pdga}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {name}
-                  </a>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-square relative mb-4">
-                  <Image
-                    // Use the player's full name from the public folder with .jpg extension.
-                    src={`/${name}.jpg`}
-                    alt={name}
-                    fill
-                    className="object-cover rounded-lg"
-                  />
-                </div>
-                <p className="text-sm text-muted-foreground">Team Player</p>
-              </CardContent>
-            </Card>
-          ))}
+      <AnimatedElement delay={0.4}>
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+            Team Players
+          </h2>
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {players.map(({ name, pdga }) => (
+              <Card key={name}>
+                <CardHeader>
+                  <CardTitle className="text-base sm:text-lg">
+                    <a
+                      href={`https://www.pdga.com/player/${pdga}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {name}
+                    </a>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="aspect-square relative mb-4">
+                    <Image
+                      // Use the player's full name from the public folder with .jpg extension.
+                      src={`/${name}.jpg`}
+                      alt={name}
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground">Team Player</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
+      </AnimatedElement>
     </div>
   );
 }

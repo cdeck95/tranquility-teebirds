@@ -1,39 +1,42 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import Image from "next/image"
-import Link from "next/link"
-
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
+import Link from "next/link";
+import birdieLogo from "/public/Birdie.jpg";
+import dickieLogo from "/public/DickieDG.png";
 const partners = [
   {
-    name: "DiscMaster Pro",
-    logo: "/placeholder.svg?height=100&width=200",
-    description: "Leading manufacturer of professional-grade disc golf equipment.",
-    website: "https://example.com/discmaster",
+    name: "Birdie Disc Golf Supply Co.",
+    // Assumed logo image in the public folder
+    logo: birdieLogo,
+    description:
+      "Main involvement will be prize donations and providing tournament player packs.",
+    website: "https://birdiediscgolfsupply.com/",
   },
   {
-    name: "GreenField Parks",
-    logo: "/placeholder.svg?height=100&width=200",
-    description: "Our primary venue partner, providing top-notch disc golf courses.",
-    website: "https://example.com/greenfield",
+    name: "DickieDG",
+    // Assumed logo image in the public folder
+    logo: dickieLogo,
+    description:
+      "Featuring events and player accomplishments. Follow on Instagram.",
+    website: "https://www.instagram.com/dickie.dg?igsh=MWVxbnJ2eG02YXkxbQ==",
   },
   {
-    name: "FlyHigh Apparel",
-    logo: "/placeholder.svg?height=100&width=200",
-    description: "Official clothing sponsor for the Tranquility TeeBirds.",
-    website: "https://example.com/flyhigh",
+    name: "Disc Rescue Network",
+    // Using logo and details from the Lost & Found page
+    logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Logo%20Transparent-oozlRNUhrxlINd6nbuQyz1fuM8Tcw1.png",
+    description:
+      "Tranquility TeeBirds uses Disc Rescue Network for our lost and found system.",
+    website: "https://app.discrescuenetwork.com",
   },
-  {
-    name: "Precision Putters",
-    logo: "/placeholder.svg?height=100&width=200",
-    description: "Specialized in high-accuracy disc golf putters.",
-    website: "https://example.com/precision",
-  },
-]
+];
 
 export default function PartnersPage() {
   return (
     <div className="container py-8 sm:py-12 px-4 sm:px-6">
       <div className="text-center mb-8 sm:mb-12">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-4">Our Partners</h1>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-4">
+          Our Partners
+        </h1>
         <p className="text-base sm:text-lg text-muted-foreground">
           Meet the amazing organizations that support the Tranquility TeeBirds
         </p>
@@ -67,6 +70,5 @@ export default function PartnersPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }
-
