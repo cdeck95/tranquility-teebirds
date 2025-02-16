@@ -29,7 +29,7 @@ const endDate = new Date(currentYear, 11, 31);
 
 // Helper: get first Thursday of the year
 function getFirstThursday(year: number) {
-  let d = new Date(year, 0, 1);
+  const d = new Date(year, 0, 1);
   while (d.getDay() !== 4) {
     d.setDate(d.getDate() + 1);
   }
@@ -49,7 +49,7 @@ const recurringMondayEvents: Array<{
   location: string;
   description: string;
 }> = [];
-let iterationDate = new Date(startDate);
+const iterationDate = new Date(startDate);
 
 while (iterationDate <= endDate) {
   // Thursday events (day 4)
@@ -242,9 +242,9 @@ export default function EventsPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Event</TableCell>
-                      <TableCell>Location</TableCell>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Event</TableHead>
+                      <TableHead>Location</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
