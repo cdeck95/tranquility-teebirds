@@ -1,11 +1,26 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Calendar, Users, Bell, Search, Handshake, Mail, Menu, Home } from "lucide-react"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { cn } from "@/lib/utils"
-import { useState } from "react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Calendar,
+  Users,
+  Bell,
+  Search,
+  Handshake,
+  Mail,
+  Menu,
+  Home,
+} from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 const navItems = [
   {
@@ -28,11 +43,11 @@ const navItems = [
     href: "/lost-found",
     icon: Search,
   },
-  {
-    title: "Bulletin",
-    href: "/bulletin",
-    icon: Bell,
-  },
+  // {
+  //   title: "Bulletin",
+  //   href: "/bulletin",
+  //   icon: Bell,
+  // },
   {
     title: "Partners",
     href: "/partners",
@@ -43,10 +58,10 @@ const navItems = [
     href: "/contact",
     icon: Mail,
   },
-]
+];
 
 export function MainNav() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -87,7 +102,7 @@ export function MainNav() {
                   onClick={() => setIsOpen(false)}
                   className={cn(
                     "flex items-center gap-2 text-lg font-semibold",
-                    "hover:text-primary transition-colors",
+                    "hover:text-primary transition-colors"
                   )}
                 >
                   <item.icon className="h-5 w-5" />
@@ -99,6 +114,5 @@ export function MainNav() {
         </Sheet>
       </div>
     </header>
-  )
+  );
 }
-

@@ -70,9 +70,9 @@ export default function Home() {
               <p className="text-sm sm:text-base text-muted-foreground mb-4">
                 Check out our latest achievements and team updates
               </p>
-              <Button asChild variant="secondary" className="w-full sm:w-auto">
+              {/* <Button asChild variant="secondary" className="w-full sm:w-auto">
                 <Link href="/bulletin">Read More</Link>
-              </Button>
+              </Button> */}
             </div>
           </AnimatedElement>
           <AnimatedElement delay={0.6}>
