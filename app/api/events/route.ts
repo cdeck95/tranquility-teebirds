@@ -5,7 +5,7 @@ import path from "path";
 // Define the event data structure
 export interface EventItem {
   title: string;
-  date: Date; // Changed from string to Date object
+  date: Date; // use Date object directly
   location: string;
   description: string;
   registrationLink?: string;
@@ -21,25 +21,38 @@ export async function GET() {
   );
   const csvData = await fs.readFile(csvPath, "utf8");
 
-  // Split CSV into lines and parse header
+  // Split CSV into lines and parse head (new header format)
+  // Expected header: Date,Format,Layout,Location,Registration Link,Sign up period starts,Starts,Sunset Times
   const lines = csvData.split("\n").filter((line) => line.trim().length);
-
-  // Expected header: Date,Format,Layout,Location,Registration Link,Start Time,Sign up period
+  const header = lines
+    .shift()
+    ?.split(",")
+    .map((h) => h.trim());
+  console.log(header);
   const events: EventItem[] = [];
   const currentYear = new Date().getFullYear();
 
-  // Process each CSV row
+  // Process each CSV row using new column indices:
+  // parts[0]: Date, parts[1]: Format, parts[2]: Layout, parts[3]: Location,
+  // parts[4]: Registration Link, parts[5]: Sign up period starts, parts[6]: Starts, parts[7]: Sunset Times
   for (const line of lines) {
     const parts = line.split(",").map((p) => p.trim());
     if (parts.length < 3) continue;
-    const [dateStr, format, layout, location, regLink, startTime, signUp] =
+    const [dateStr, format, layout, location, regLink, signUpStarts, starts] =
       parts;
     const [month, day] = dateStr.split("/").map(Number);
     const dateObj = new Date(currentYear, month - 1, day);
     const title = layout !== "" ? `${format} - ${layout}` : format;
-    const description = `Start Time: ${startTime || "TBD"}. Sign up period: ${
-      signUp || "TBD"
-    }.`;
+    // Only insert non-empty values in the description.
+    let descriptionParts: string[] = [];
+    if (signUpStarts) {
+      descriptionParts.push(`Sign up period starts: ${signUpStarts}`);
+    }
+    if (starts) {
+      descriptionParts.push(`Starts: ${starts}`);
+    }
+    const description =
+      descriptionParts.join(". ") + (descriptionParts.length ? "." : "");
     events.push({
       title,
       date: dateObj, // use Date object directly

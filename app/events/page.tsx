@@ -160,20 +160,17 @@ export default function EventsPage() {
         <section>
           <h2 className="text-2xl font-bold mb-6">Event Calendar</h2>
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr]">
-            <Card>
-              <CardContent className="pt-6">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(date) => {
-                    setSelectedDate(date);
-                    setCurrentPage(1); // reset pagination on new filter
-                  }}
-                  className="rounded-md border"
-                  disabled={calendarDisabled}
-                />
-              </CardContent>
-            </Card>
+            <Calendar
+              mode="single"
+              selected={selectedDate}
+              onSelect={(date) => {
+                setSelectedDate(date);
+                setCurrentPage(1); // reset pagination on new filter
+              }}
+              className="rounded-md mx-auto border max-w-[250px] max-h-[325px]"
+              disabled={calendarDisabled}
+            />
+
             <Card>
               <CardHeader>
                 <CardTitle>
