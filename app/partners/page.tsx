@@ -1,23 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import birdieLogo from "/public/birdie.jpg";
+import birdieLogo from "/public/birdie.png";
 import dickieLogo from "/public/dickieDG.png";
+import { Button } from "@/components/ui/button";
+import { MousePointerClick } from "lucide-react";
 const partners = [
   {
     name: "Birdie Disc Golf Supply Co.",
     // Assumed logo image in the public folder
     logo: birdieLogo,
-    description:
-      "Main involvement will be prize donations and providing tournament player packs.",
+    description: "A disc, apparel and accessory supply brand.",
     website: "https://birdiediscgolfsupply.com/",
   },
   {
     name: "DickieDG",
     // Assumed logo image in the public folder
     logo: dickieLogo,
-    description:
-      "Featuring events and player accomplishments. Follow on Instagram.",
+    description: "An event LLC.",
     website: "https://www.instagram.com/dickie.dg?igsh=MWVxbnJ2eG02YXkxbQ==",
   },
   {
@@ -25,8 +25,8 @@ const partners = [
     // Using logo and details from the Lost & Found page
     logo: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Logo%20Transparent-oozlRNUhrxlINd6nbuQyz1fuM8Tcw1.png",
     description:
-      "Tranquility TeeBirds uses Disc Rescue Network for our lost and found system.",
-    website: "https://app.discrescuenetwork.com",
+      "Disc Rescue Network started as a personal initiative by our founder, Chris Deck, who sought a better way to manage lost discs while volunteering at Tranquility Trails. Evolving from a rudimentary system of buckets, Facebook groups, and manual texts, it has grown into a dedicated platform that streamlines lost and found management for disc golf courses worldwide.",
+    website: "https://www.discrescuenetwork.com",
   },
 ];
 
@@ -38,7 +38,7 @@ export default function PartnersPage() {
           Our Partners
         </h1>
         <p className="text-base sm:text-lg text-muted-foreground">
-          Meet the amazing organizations that support the Tranquility TeeBirds
+          Meet the amazing organizations that support the Tranquility Teebirds
         </p>
       </div>
 
@@ -63,7 +63,10 @@ export default function PartnersPage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Visit Website
+                <Button variant="default" className="flex flex-row gap-2">
+                  <MousePointerClick className="h-4 w-4" />
+                  Visit
+                </Button>
               </Link>
             </CardContent>
           </Card>

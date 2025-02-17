@@ -16,7 +16,7 @@ export default function LostFoundPage() {
       </div>
 
       <Card className="max-w-2xl mx-auto">
-        <CardHeader className="text-center">
+        <CardHeader className="text-;eft">
           <div className="relative w-full h-16 sm:h-20 mb-6">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Logo%20Transparent-oozlRNUhrxlINd6nbuQyz1fuM8Tcw1.png"
@@ -30,19 +30,26 @@ export default function LostFoundPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p>
-            Tranquility TeeBirds uses Disc Rescue Network for our lost and found
-            system. If you&apos;ve lost a disc during one of our events or at
-            our courses, please check the Disc Rescue Network to see if it has
-            been found.
+            Tranquility Teebirds uses{" "}
+            <a
+              href="https://www.discrescuenetwork.com"
+              className="text-blue-500 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Disc Rescue Network
+            </a>{" "}
+            for our lost and found system. If you&apos;ve lost a disc during one
+            of our events or at our courses, please check the Disc Rescue
+            Network to see if it has been found.
           </p>
-          <p>Visit the link below to search for your lost discs:</p>
           <Button asChild className="w-full sm:w-auto">
             <Link
               href="https://app.discrescuenetwork.com"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Check Disc Rescue Network
+              Find your disc
             </Link>
           </Button>
         </CardContent>

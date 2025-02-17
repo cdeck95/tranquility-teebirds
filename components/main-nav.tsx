@@ -7,9 +7,9 @@ import {
   Users,
   Search,
   Handshake,
-  Mail,
   Menu,
   Home,
+  Info,
 } from "lucide-react";
 import {
   Sheet,
@@ -28,6 +28,11 @@ const navItems = [
     title: "Home",
     href: "/",
     icon: Home,
+  },
+  {
+    title: "About",
+    href: "/course-information",
+    icon: Info,
   },
   {
     title: "Events",
@@ -54,11 +59,6 @@ const navItems = [
     href: "/partners",
     icon: Handshake,
   },
-  {
-    title: "Contact",
-    href: "/contact",
-    icon: Mail,
-  },
 ];
 
 export function MainNav() {
@@ -70,7 +70,7 @@ export function MainNav() {
         <Link href="/" className="flex items-center mx-2 space-x-2">
           <Image
             src={TeeBirdLogo}
-            alt="Tranquility TeeBirds Logo"
+            alt="Tranquility Teebirds Logo"
             width={56}
             height={56}
             className="rounded-full cursor-pointer"

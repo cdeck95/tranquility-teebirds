@@ -1,12 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CalendarIcon } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CalendarIcon } from "lucide-react";
 
 const bulletinPosts = [
   {
     title: "Team Victory at Regional Championship",
     date: "June 15, 2025",
     content:
-      "The Tranquility TeeBirds secured first place at the Regional Disc Golf Championship. Congratulations to all team members for their outstanding performance!",
+      "The Tranquility Teebirds secured first place at the Regional Disc Golf Championship. Congratulations to all team members for their outstanding performance!",
   },
   {
     title: "New Practice Schedule Announced",
@@ -20,15 +20,18 @@ const bulletinPosts = [
     content:
       "Our recent disc golf clinic for local youth was a huge success. Thank you to all volunteers and participants!",
   },
-]
+];
 
 export default function BulletinPage() {
   return (
     <div className="container py-8 sm:py-12 px-4 sm:px-6">
       <div className="text-center mb-8 sm:mb-12">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-4">Bulletin Board</h1>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-4">
+          Bulletin Board
+        </h1>
         <p className="text-base sm:text-lg text-muted-foreground">
-          Stay updated with the latest news and announcements from the Tranquility TeeBirds
+          Stay updated with the latest news and announcements from the
+          Tranquility Teebirds
         </p>
       </div>
 
@@ -49,6 +52,5 @@ export default function BulletinPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }
-

@@ -14,7 +14,7 @@ export default function Home() {
             <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 mb-6 sm:mb-8">
               <Image
                 src={logo}
-                alt="Tranquility TeeBirds Logo"
+                alt="Tranquility Teebirds Logo"
                 fill
                 className="object-contain"
                 priority
@@ -23,7 +23,7 @@ export default function Home() {
           </AnimatedElement>
           <AnimatedElement delay={0.2}>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter">
-              Tranquility TeeBirds
+              Tranquility Teebirds
             </h1>
           </AnimatedElement>
           <AnimatedElement delay={0.4}>
@@ -66,13 +66,15 @@ export default function Home() {
           </AnimatedElement>
           <AnimatedElement delay={0.4}>
             <div className="flex flex-col items-center text-center p-4 sm:p-6 bg-accent rounded-lg">
-              <h3 className="text-xl sm:text-2xl font-bold mb-2">Team News</h3>
+              <h3 className="text-xl sm:text-2xl font-bold mb-2">
+                Meet the Team
+              </h3>
               <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                Check out our latest achievements and team updates
+                Learn more about our disc golf team and community members
               </p>
-              {/* <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link href="/bulletin">Read More</Link>
-              </Button> */}
+              <Button asChild variant="secondary" className="w-full sm:w-auto">
+                <Link href="/team">Read More</Link>
+              </Button>
             </div>
           </AnimatedElement>
           <AnimatedElement delay={0.6}>
@@ -84,7 +86,7 @@ export default function Home() {
                 Join our community projects and disc golf initiatives
               </p>
               <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link href="/contact">Contact Us</Link>
+                <Link href="/course-information">Contact Us</Link>
               </Button>
             </div>
           </AnimatedElement>
