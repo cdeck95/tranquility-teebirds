@@ -20,7 +20,6 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from "@/components/ui/pagination";
-import { Badge } from "@/components/ui/badge"; // Added Badge import
 
 // Generate recurring events for the current year
 const today = new Date();
