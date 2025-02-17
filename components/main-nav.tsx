@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 import TeeBirdLogo from "@/public/teebirds logo.jpg";
 import { useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   {
@@ -63,6 +64,7 @@ const navItems = [
 
 export function MainNav() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -101,20 +103,24 @@ export function MainNav() {
             <SheetHeader>
               <SheetTitle>Navigation</SheetTitle>
             </SheetHeader>
-            <nav className="flex flex-col gap-4 mt-4">
+            <nav className="flex flex-col gap-2 mt-4">
               {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={cn(
-                    "flex items-center gap-2 text-lg font-semibold",
-                    "hover:text-primary transition-colors"
-                  )}
+                <Button
+                  asChild
+                  variant={pathname === item.href ? "secondary" : "ghost"}
+                  className="w-full justify-start flex gap-2"
+                  disabled
                 >
-                  <item.icon className="h-5 w-5" />
-                  {item.title}
-                </Link>
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pointer-events-none"
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.title}
+                  </Link>
+                </Button>
               ))}
             </nav>
           </SheetContent>

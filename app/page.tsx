@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatedElement } from "@/components/animated-element";
 import logo from "@/public/teebirds logo.jpg";
+import { Card } from "@/components/ui/card";
 
 export default function Home() {
   return (
@@ -52,43 +53,47 @@ export default function Home() {
       <section className="container py-8 sm:py-12 md:py-24 px-4 sm:px-6">
         <div className="grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatedElement delay={0.2}>
-            <div className="flex flex-col items-center text-center p-4 sm:p-6 bg-accent rounded-lg">
-              <h3 className="text-xl sm:text-2xl font-bold mb-2">
-                Latest Events
-              </h3>
-              <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                Stay updated with our tournament schedule and community events
-              </p>
+            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42">
+              <div className="flex flex-col items-center text-center">
+                <h3 className="text-xl sm:text-2xl font-bold mb-2">
+                  Lost & Found
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-4">
+                  Lost something on the course? Check our lost & found.
+                </p>
+              </div>
               <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link href="/events">View Calendar</Link>
+                <Link href="/lost-and-found">View More</Link>
               </Button>
-            </div>
+            </Card>
           </AnimatedElement>
           <AnimatedElement delay={0.4}>
-            <div className="flex flex-col items-center text-center p-4 sm:p-6 bg-accent rounded-lg">
-              <h3 className="text-xl sm:text-2xl font-bold mb-2">
-                Meet the Team
-              </h3>
-              <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                Learn more about our disc golf team and community members
-              </p>
+            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42">
+              <div className="flex flex-col items-center text-center">
+                <h3 className="text-xl sm:text-2xl font-bold mb-2">Partners</h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-4">
+                  Learn more about our sponsors and partners.
+                </p>
+              </div>
               <Button asChild variant="secondary" className="w-full sm:w-auto">
-                <Link href="/team">Read More</Link>
+                <Link href="/partners">View More</Link>
               </Button>
-            </div>
+            </Card>
           </AnimatedElement>
           <AnimatedElement delay={0.6}>
-            <div className="flex flex-col items-center text-center p-4 sm:p-6 bg-accent rounded-lg sm:col-span-2 lg:col-span-1">
-              <h3 className="text-xl sm:text-2xl font-bold mb-2">
-                Get Involved
-              </h3>
-              <p className="text-sm sm:text-base text-muted-foreground mb-4">
-                Join our community projects and disc golf initiatives
-              </p>
+            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42">
+              <div className="flex flex-col items-center text-center">
+                <h3 className="text-xl sm:text-2xl font-bold mb-2">
+                  Get In Touch
+                </h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-4">
+                  Have questions? Contact us for more information.
+                </p>
+              </div>
               <Button asChild variant="secondary" className="w-full sm:w-auto">
                 <Link href="/course-information">Contact Us</Link>
               </Button>
-            </div>
+            </Card>
           </AnimatedElement>
         </div>
       </section>

@@ -37,7 +37,7 @@ export default async function TeamPage() {
           Our Team
         </h1>
         <p className="text-base sm:text-lg text-muted-foreground">
-          Meet the Tranquility Teebirds disc golf team
+          Meet the Tranquility Teebirds
         </p>
       </div>
 
