@@ -48,7 +48,7 @@ export default async function TeamPage() {
           </h2>
           <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {captains.map(({ name, pdga }) => (
-              <Card key={name}>
+              <Card key={name} className="shadow-md">
                 <CardHeader>
                   <CardTitle className="flex flex-row justify-between items-center text-base sm:text-lg">
                     {name}
@@ -98,7 +98,7 @@ export default async function TeamPage() {
           </h2>
           <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {players.map(({ name, pdga }) => (
-              <Card key={name} className="relative">
+              <Card key={name} className="relative shadow-md">
                 {/* Globe icon for PDGA link */}
                 <a
                   href={`https://www.pdga.com/player/${pdga}`}

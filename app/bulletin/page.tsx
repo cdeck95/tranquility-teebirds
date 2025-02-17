@@ -39,7 +39,7 @@ export default function BulletinPage() {
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {bulletinPosts.map((post, index) => (
-            <Card key={index} className="bg-accent">
+            <Card key={index} className="bg-accent shadow-md">
               <CardHeader>
                 <CardTitle>{post.title}</CardTitle>
               </CardHeader>

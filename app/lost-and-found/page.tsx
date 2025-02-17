@@ -17,7 +17,7 @@ export default function LostFoundPage() {
           </p>
         </div>
 
-        <Card className="max-w-2xl mx-auto">
+        <Card className="max-w-2xl mx-auto shadow-md">
           <CardHeader className="text-left">
             <div className="relative w-full h-16 sm:h-20 mb-6">
               <Image

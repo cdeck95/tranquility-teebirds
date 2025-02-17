@@ -18,7 +18,7 @@ export default function ContactPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-1">
-          <Card className="bg-accent">
+          <Card className="bg-accent shadow-md">
             <CardHeader>
               <CardTitle>Contact Information</CardTitle>
             </CardHeader>
@@ -52,7 +52,7 @@ export default function ContactPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="shadow-md">
             <CardHeader>
               <CardTitle>UDisc Course Page</CardTitle>
             </CardHeader>

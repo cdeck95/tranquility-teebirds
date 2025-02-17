@@ -123,7 +123,7 @@ export default function EventsPage() {
           <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {upcomingEvents.map((event, index) => (
-              <Card key={index} className="bg-accent">
+              <Card key={index} className="bg-accent shadow-md">
                 <CardHeader>
                   <CardTitle>{event.title}</CardTitle>
                 </CardHeader>
@@ -167,11 +167,11 @@ export default function EventsPage() {
                 setSelectedDate(date);
                 setCurrentPage(1); // reset pagination on new filter
               }}
-              className="rounded-md mx-auto border max-w-[250px] max-h-[325px]"
+              className="rounded-md mx-auto border max-w-[250px] max-h-[325px] shadow-md"
               disabled={calendarDisabled}
             />
 
-            <Card>
+            <Card className="shadow-md">
               <CardHeader>
                 <CardTitle>
                   {selectedDate

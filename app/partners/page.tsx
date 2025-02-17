@@ -47,7 +47,7 @@ export default function PartnersPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           {partners.map((partner, index) => (
-            <Card key={index} className="bg-accent">
+            <Card key={index} className="bg-accent shadow-md">
               <CardHeader>
                 <Image
                   src={partner.logo || "/placeholder.svg"}

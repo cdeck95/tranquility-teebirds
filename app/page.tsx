@@ -53,7 +53,7 @@ export default function Home() {
       <section className="container mx-auto py-8 sm:py-12 md:py-24 px-4 sm:px-6">
         <div className="grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatedElement delay={0.2}>
-            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42">
+            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42 shadow-md">
               <div className="flex flex-col items-center text-center">
                 <h3 className="text-xl sm:text-2xl font-bold mb-2">
                   Lost & Found
@@ -68,7 +68,7 @@ export default function Home() {
             </Card>
           </AnimatedElement>
           <AnimatedElement delay={0.4}>
-            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42">
+            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42 shadow-md">
               <div className="flex flex-col items-center text-center">
                 <h3 className="text-xl sm:text-2xl font-bold mb-2">Partners</h3>
                 <p className="text-sm sm:text-base text-muted-foreground mb-4">
@@ -81,7 +81,7 @@ export default function Home() {
             </Card>
           </AnimatedElement>
           <AnimatedElement delay={0.6}>
-            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42">
+            <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42 shadow-md">
               <div className="flex flex-col items-center text-center">
                 <h3 className="text-xl sm:text-2xl font-bold mb-2">
                   Get In Touch
