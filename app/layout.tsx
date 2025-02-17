@@ -4,7 +4,6 @@ import "./globals.css";
 import { MainNav } from "@/components/main-nav";
 import { cn } from "@/lib/utils";
 import type React from "react"; // Added import for React
-import { Facebook, Instagram, Globe } from "lucide-react"; // added for icons
 import Link from "next/link";
 import { SocialIcons } from "@/components/SocialIcons";
 

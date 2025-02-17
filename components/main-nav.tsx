@@ -18,7 +18,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 import TeeBirdLogo from "@/public/teebirds logo.jpg";
 import { useState } from "react";
 import Image from "next/image";
@@ -107,12 +106,12 @@ export function MainNav() {
               {navItems.map((item) => (
                 <Button
                   asChild
+                  key={item.href}
                   variant={pathname === item.href ? "secondary" : "ghost"}
                   className="w-full justify-start flex gap-2"
                   disabled
                 >
                   <Link
-                    key={item.href}
                     href={item.href}
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pointer-events-none"
