@@ -18,7 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import TeeBirdLogo from "@/public/teebirds logo.jpg";
+import TeeBirdLogo from "@/public/teebirds logo.png";
 import { useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -67,7 +67,7 @@ export function MainNav() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 items-center px-2">
+      <div className="container mx-auto flex h-14 items-center px-2 md:px-0">
         <Link href="/" className="flex items-center mx-2 space-x-2">
           <Image
             src={TeeBirdLogo}

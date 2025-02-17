@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatedElement } from "@/components/animated-element";
-import logo from "@/public/teebirds logo.jpg";
+import logo from "@/public/teebirds logo.png";
 import { Card } from "@/components/ui/card";
 
 export default function Home() {
