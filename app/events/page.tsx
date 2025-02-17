@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/pagination";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { EventItem } from "../api/events/route";
 
 // Helper: Format event dates (accepts a Date instance)
 const formatEventDate = (eventDate: Date): string => {
@@ -57,7 +58,7 @@ function getPaginationItems(
 
 export default function EventsPage() {
   // Client state for events, selected date, and pagination
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<EventItem[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -68,7 +69,7 @@ export default function EventsPage() {
       .then((res) => res.json())
       .then((data) => {
         // Convert event.date strings back to Date objects
-        const parsedEvents = data.events.map((ev: any) => ({
+        const parsedEvents = data.events.map((ev: EventItem) => ({
           ...ev,
           date: new Date(ev.date),
         }));

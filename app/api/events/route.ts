@@ -5,7 +5,7 @@ import path from "path";
 // Define the event data structure
 export interface EventItem {
   title: string;
-  date: string; // ISO string
+  date: Date; // Changed from string to Date object
   location: string;
   description: string;
   registrationLink?: string;
@@ -23,10 +23,6 @@ export async function GET() {
 
   // Split CSV into lines and parse header
   const lines = csvData.split("\n").filter((line) => line.trim().length);
-  const header = lines
-    .shift()
-    ?.split(",")
-    .map((h) => h.trim());
 
   // Expected header: Date,Format,Layout,Location,Registration Link,Start Time,Sign up period
   const events: EventItem[] = [];
@@ -46,7 +42,7 @@ export async function GET() {
     }.`;
     events.push({
       title,
-      date: dateObj.toISOString(),
+      date: dateObj, // use Date object directly
       location: location || "Tranquility Trails, Woolwich, NJ",
       description,
       registrationLink: regLink || undefined,
