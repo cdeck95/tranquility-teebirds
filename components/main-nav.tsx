@@ -46,7 +46,7 @@ const navItems = [
   },
   {
     title: "Lost & Found",
-    href: "/lost-found",
+    href: "/lost-and-found",
     icon: Search,
   },
   // {
