@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, CalendarIcon, CheckCircle } from "lucide-react";
+import { MapPin, CalendarIcon } from "lucide-react";
 import { AnimatedElement } from "@/components/animated-element";
 import {
   Table,
@@ -20,121 +20,18 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from "@/components/ui/pagination";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-// Generate recurring events for the current year
-const today = new Date();
-// Define todayStart as the start of today (midnight)
-const todayStart = new Date(
-  today.getFullYear(),
-  today.getMonth(),
-  today.getDate()
-);
-const currentYear = today.getFullYear();
-const startDate = new Date(currentYear, today.getMonth(), today.getDate());
-const endDate = new Date(currentYear, 11, 31);
-
-// Helper: get first Thursday of the year
-function getFirstThursday(year: number) {
-  const d = new Date(year, 0, 1);
-  while (d.getDay() !== 4) {
-    d.setDate(d.getDate() + 1);
-  }
-  return d;
-}
-
-const firstThursday = getFirstThursday(currentYear);
-const recurringThursdayEvents: Array<{
-  title: string;
-  date: Date;
-  location: string;
-  description: string;
-}> = [];
-const recurringMondayEvents: Array<{
-  title: string;
-  date: Date;
-  location: string;
-  description: string;
-}> = [];
-const iterationDate = new Date(startDate);
-
-while (iterationDate <= endDate) {
-  // Thursday events (day 4)
-  if (iterationDate.getDay() === 4) {
-    // Week index from first Thursday
-    const weekIndex = Math.floor(
-      (iterationDate.getTime() - firstThursday.getTime()) /
-        (7 * 24 * 60 * 60 * 1000)
-    );
-    if (weekIndex % 4 === 3) {
-      // Every 4th Thursday: Doubles
-      recurringThursdayEvents.push({
-        title: "Tranquility Doubles",
-        date: new Date(iterationDate),
-        location: "Tranquility Trails",
-        description: `Doubles event placeholder`,
-      });
-    } else {
-      // Otherwise: Tags event
-      recurringThursdayEvents.push({
-        title: "Tranquility Tags",
-        date: new Date(iterationDate),
-        location: "Local Disc Golf Course",
-        description: `Tags event placeholder`,
-      });
-    }
-  }
-  // Monday events (day 1): Putting League
-  if (iterationDate.getDay() === 1) {
-    recurringMondayEvents.push({
-      title: "Cosmic Disc Golf Putting League",
-      date: new Date(iterationDate),
-      location: "Cosmic Disc Golf",
-      description: "Join the putting league hosted by Dickie DG.",
-    });
-  }
-  iterationDate.setDate(iterationDate.getDate() + 1);
-}
-
-const allEvents = [...recurringThursdayEvents, ...recurringMondayEvents];
-// Filter events: only today or later
-const filteredEvents = allEvents.filter((event) => event.date >= todayStart);
-// Upcoming events: first 3 after sorting by date
-const upcomingEvents = filteredEvents
-  .sort((a, b) => a.date.getTime() - b.date.getTime())
-  .slice(0, 3);
-
-// Define bullet items for specific event types
-const bulletListData: Record<string, string[]> = {
-  "Tranquility Tags": [
-    "$10 to play",
-    "Cash Only",
-    "Layout: Shorts",
-    "CTP Prizes",
-    "UDisc",
-    "Round Start: 5:15",
-    "Standings: https://tags.discrescuenetwork.com",
-  ],
-  "Tranquility Doubles": [
-    "$10 to play",
-    "Cash Only",
-    "Layout: Shorts",
-    "CTP Prizes",
-    "UDisc",
-    "Round Start: 5:15",
-  ],
-};
-
-// Helper: Format event dates
+// Helper: Format event dates (accepts a Date instance)
 const formatEventDate = (eventDate: Date): string => {
-  // If the event is today, return "today"
-  if (eventDate.toDateString() === todayStart.toDateString()) {
-    return "Today";
-  }
-  const diffDays =
-    (eventDate.getTime() - todayStart.getTime()) / (1000 * 60 * 60 * 24);
-  if (diffDays >= 0 && diffDays < 7) {
-    return eventDate.toLocaleDateString(undefined, { weekday: "long" });
-  }
+  const today = new Date();
+  const todayStart = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+  if (eventDate.toDateString() === todayStart.toDateString()) return "Today";
   return eventDate.toLocaleDateString();
 };
 
@@ -145,48 +42,67 @@ function getPaginationItems(
 ): (number | string)[] {
   const pages: (number | string)[] = [];
   if (totalPages <= 7) {
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
-    }
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
   } else {
     pages.push(1);
-    if (currentPage > 4) {
-      pages.push("...");
-    }
+    if (currentPage > 4) pages.push("...");
     const startPage = Math.max(2, currentPage - 1);
     const endPage = Math.min(totalPages - 1, currentPage + 1);
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-    if (currentPage < totalPages - 3) {
-      pages.push("...");
-    }
+    for (let i = startPage; i <= endPage; i++) pages.push(i);
+    if (currentPage < totalPages - 3) pages.push("...");
     pages.push(totalPages);
   }
   return pages;
 }
 
 export default function EventsPage() {
-  // Pagination state for table events
-  const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+  // Client state for events, selected date, and pagination
+  const [events, setEvents] = useState<any[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  // Filtering: if a selected date is chosen, filter events for that date; otherwise use all filtered events.
+  // Fetch events from the API route on mount
+  useEffect(() => {
+    fetch("/api/events")
+      .then((res) => res.json())
+      .then((data) => {
+        // Convert event.date strings back to Date objects
+        const parsedEvents = data.events.map((ev: any) => ({
+          ...ev,
+          date: new Date(ev.date),
+        }));
+        setEvents(parsedEvents);
+      });
+  }, []);
+
+  // Compute upcoming events: filter events with a date >= today (using today's start), sort them and then take the first 3
+  const today = new Date();
+  const todayStart = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
+  const upcomingEvents = events
+    .filter((event) => event.date >= todayStart)
+    .sort((a, b) => a.date.getTime() - b.date.getTime())
+    .slice(0, 3);
+
+  // Filter events based on selected date if available
   const filteredTableEvents = selectedDate
-    ? filteredEvents.filter(
+    ? events.filter(
         (event) => event.date.toDateString() === selectedDate.toDateString()
       )
-    : filteredEvents;
+    : events;
   const totalPages = Math.ceil(filteredTableEvents.length / itemsPerPage);
   const paginatedEvents = filteredTableEvents
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  // Disable dates where no event exists
   const calendarDisabled = (date: Date) =>
-    !filteredEvents.some(
-      (event) => event.date.toDateString() === date.toDateString()
-    );
+    !events.some((event) => event.date.toDateString() === date.toDateString());
+
   return (
     <div className="grid grid-cols-1 lg:container lg:mx-auto py-8 sm:py-12 px-4 sm:px-6">
       <AnimatedElement>
@@ -200,79 +116,45 @@ export default function EventsPage() {
         </div>
       </AnimatedElement>
 
+      {/* Upcoming Events Section - shows only first 3 upcoming events */}
       <AnimatedElement delay={0.2}>
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {upcomingEvents.map((event, index) => {
-              // Obtain bullet data only if defined in bulletListData; otherwise use undefined.
-              const eventBulletData = bulletListData[event.title];
-              return (
-                <Card key={index} className="bg-accent">
-                  <CardHeader>
-                    <CardTitle>{event.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 mb-4">
-                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                        <CalendarIcon className="h-4 w-4 flex-shrink-0" />
-                        <span>{formatEventDate(event.date)}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                        <MapPin className="h-4 w-4 flex-shrink-0" />
-                        <span>{event.location}</span>
-                      </div>
-                      {/* Render round start if bullet data exists */}
-                      {eventBulletData &&
-                        (() => {
-                          const roundStartItem = eventBulletData.find((item) =>
-                            item.toLowerCase().includes("round start")
-                          );
-                          if (roundStartItem) {
-                            return (
-                              <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                                <CalendarIcon className="h-4 w-4 flex-shrink-0" />
-                                <span>{roundStartItem}</span>
-                              </div>
-                            );
-                          }
-                        })()}
+            {upcomingEvents.map((event, index) => (
+              <Card key={index} className="bg-accent">
+                <CardHeader>
+                  <CardTitle>{event.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 mb-4">
+                    <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                      <CalendarIcon className="h-4 w-4 flex-shrink-0" />
+                      <span>{formatEventDate(event.date)}</span>
                     </div>
-                    {eventBulletData ? (
-                      <ul className="grid grid-cols-2 gap-2 list-none">
-                        {eventBulletData.map((item, idx) => (
-                          <li key={idx} className="flex items-center">
-                            <CheckCircle className="h-3 w-3 text-green-500 mr-2" />
-                            {item.toLowerCase().includes("standings") ? (
-                              <a
-                                href="https://tags.discrescuenetwork.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm font-medium text-blue-600 hover:underline"
-                              >
-                                Tags Standings
-                              </a>
-                            ) : (
-                              <span className="text-sm text-gray-700">
-                                {item}
-                              </span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-sm text-gray-700">
-                        {event.description}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              );
-            })}
+                    <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                      <MapPin className="h-4 w-4 flex-shrink-0" />
+                      <span>{event.location}</span>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-700">{event.description}</p>
+                  {event.registrationLink && (
+                    <div className="mt-4">
+                      <Button asChild variant="default" size="sm">
+                        <Link href={event.registrationLink} target="_blank">
+                          Register
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </section>
       </AnimatedElement>
 
+      {/* Event Calendar & Events Table Section */}
       <AnimatedElement delay={0.4}>
         <section>
           <h2 className="text-2xl font-bold mb-6">Event Calendar</h2>
@@ -282,7 +164,10 @@ export default function EventsPage() {
                 <Calendar
                   mode="single"
                   selected={selectedDate}
-                  onSelect={setSelectedDate}
+                  onSelect={(date) => {
+                    setSelectedDate(date);
+                    setCurrentPage(1); // reset pagination on new filter
+                  }}
                   className="rounded-md border"
                   disabled={calendarDisabled}
                 />
