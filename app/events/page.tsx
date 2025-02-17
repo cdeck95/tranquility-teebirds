@@ -20,6 +20,7 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from "@/components/ui/pagination";
+import { Badge } from "@/components/ui/badge"; // Added Badge import
 
 // Generate recurring events for the current year
 const today = new Date();
@@ -104,18 +105,17 @@ const bulletListData: Record<string, string[]> = {
     "Cash Only",
     "Layout: Shorts",
     "CTP Prizes",
-    "Check in on UDisc after Sign up",
-    "Sign ups: 4:40-5:10 | Round Start: 5:15",
-    "Be sure to check our tags standings: https://tags.discrescuenetwork.com",
+    "UDisc",
+    "Round Start: 5:15",
+    "Standings: https://tags.discrescuenetwork.com",
   ],
   "Tranquility Doubles": [
     "$10 to play",
     "Cash Only",
     "Layout: Shorts",
     "CTP Prizes",
-    "Check in on UDisc after Sign up",
-    "Sign ups: 4:40-5:10 | Round Start: 5:15",
-    "Tags Standings: https://tags.discrescuenetwork.com",
+    "UDisc",
+    "Round Start: 5:15",
   ],
 };
 
@@ -196,45 +196,66 @@ export default function EventsPage() {
           <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {upcomingEvents.map((event, index) => {
-              // Use bullet list if defined, otherwise fallback to splitting description by newline.
-              const bulletItems = bulletListData[event.title]
-                ? bulletListData[event.title]
-                : event.description.split("\n").filter(Boolean);
+              // Obtain bullet data only if defined in bulletListData; otherwise use undefined.
+              const eventBulletData = bulletListData[event.title];
               return (
                 <Card key={index} className="bg-accent">
                   <CardHeader>
                     <CardTitle>{event.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex items-center gap-2 text-muted-foreground mb-2">
-                      <CalendarIcon className="h-4 w-4 flex-shrink-0" />
-                      <span>{formatEventDate(event.date)}</span>
+                    <div className="grid grid-cols-1 mb-4">
+                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                        <CalendarIcon className="h-4 w-4 flex-shrink-0" />
+                        <span>{formatEventDate(event.date)}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                        <MapPin className="h-4 w-4 flex-shrink-0" />
+                        <span>{event.location}</span>
+                      </div>
+                      {/* Render round start if bullet data exists */}
+                      {eventBulletData &&
+                        (() => {
+                          const roundStartItem = eventBulletData.find((item) =>
+                            item.toLowerCase().includes("round start")
+                          );
+                          if (roundStartItem) {
+                            return (
+                              <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                                <CalendarIcon className="h-4 w-4 flex-shrink-0" />
+                                <span>{roundStartItem}</span>
+                              </div>
+                            );
+                          }
+                        })()}
                     </div>
-                    <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                      <MapPin className="h-4 w-4 flex-shrink-0" />
-                      <span>{event.location}</span>
-                    </div>
-                    <ul className="list-disc pl-5 space-y-1">
-                      {bulletItems.map((item, idx) => (
-                        <li key={idx} className="flex items-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          {item.toLowerCase().includes("tags standings") ? (
-                            <span className="text-sm">
+                    {eventBulletData ? (
+                      <ul className="grid grid-cols-2 gap-2 list-none">
+                        {eventBulletData.map((item, idx) => (
+                          <li key={idx} className="flex items-center">
+                            <CheckCircle className="h-3 w-3 text-green-500 mr-2" />
+                            {item.toLowerCase().includes("standings") ? (
                               <a
                                 href="https://tags.discrescuenetwork.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-blue-500 underline"
+                                className="text-sm font-medium text-blue-600 hover:underline"
                               >
                                 Tags Standings
                               </a>
-                            </span>
-                          ) : (
-                            <span className="text-sm">{item}</span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
+                            ) : (
+                              <span className="text-sm text-gray-700">
+                                {item}
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-gray-700">
+                        {event.description}
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
               );
