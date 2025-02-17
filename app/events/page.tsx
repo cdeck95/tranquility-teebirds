@@ -23,6 +23,12 @@ import {
 
 // Generate recurring events for the current year
 const today = new Date();
+// Define todayStart as the start of today (midnight)
+const todayStart = new Date(
+  today.getFullYear(),
+  today.getMonth(),
+  today.getDate()
+);
 const currentYear = today.getFullYear();
 const startDate = new Date(currentYear, today.getMonth(), today.getDate());
 const endDate = new Date(currentYear, 11, 31);
@@ -91,7 +97,7 @@ while (iterationDate <= endDate) {
 
 const allEvents = [...recurringThursdayEvents, ...recurringMondayEvents];
 // Filter events: only today or later
-const filteredEvents = allEvents.filter((event) => event.date >= today);
+const filteredEvents = allEvents.filter((event) => event.date >= todayStart);
 // Upcoming events: first 3 after sorting by date
 const upcomingEvents = filteredEvents
   .sort((a, b) => a.date.getTime() - b.date.getTime())
@@ -120,8 +126,12 @@ const bulletListData: Record<string, string[]> = {
 
 // Helper: Format event dates
 const formatEventDate = (eventDate: Date): string => {
+  // If the event is today, return "today"
+  if (eventDate.toDateString() === todayStart.toDateString()) {
+    return "Today";
+  }
   const diffDays =
-    (eventDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+    (eventDate.getTime() - todayStart.getTime()) / (1000 * 60 * 60 * 24);
   if (diffDays >= 0 && diffDays < 7) {
     return eventDate.toLocaleDateString(undefined, { weekday: "long" });
   }
