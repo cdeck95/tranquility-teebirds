@@ -129,6 +129,34 @@ const formatEventDate = (eventDate: Date): string => {
   return eventDate.toLocaleDateString();
 };
 
+// Helper: Generate pagination items with ellipsis
+function getPaginationItems(
+  currentPage: number,
+  totalPages: number
+): (number | string)[] {
+  const pages: (number | string)[] = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i);
+    }
+  } else {
+    pages.push(1);
+    if (currentPage > 4) {
+      pages.push("...");
+    }
+    const startPage = Math.max(2, currentPage - 1);
+    const endPage = Math.min(totalPages - 1, currentPage + 1);
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    if (currentPage < totalPages - 3) {
+      pages.push("...");
+    }
+    pages.push(totalPages);
+  }
+  return pages;
+}
+
 export default function EventsPage() {
   // Pagination state for table events
   const itemsPerPage = 5;
@@ -151,7 +179,7 @@ export default function EventsPage() {
       (event) => event.date.toDateString() === date.toDateString()
     );
   return (
-    <div className="container mx-auto py-8 sm:py-12 px-4 sm:px-6">
+    <div className="grid grid-cols-1 lg:container lg:mx-auto py-8 sm:py-12 px-4 sm:px-6">
       <AnimatedElement>
         <div className="text-center mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-4">
@@ -218,7 +246,7 @@ export default function EventsPage() {
       <AnimatedElement delay={0.4}>
         <section>
           <h2 className="text-2xl font-bold mb-6">Event Calendar</h2>
-          <div className="grid gap-8 lg:grid-cols-[300px_1fr]">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[300px_1fr]">
             <Card>
               <CardContent className="pt-6">
                 <Calendar
@@ -257,7 +285,7 @@ export default function EventsPage() {
                     ))}
                   </TableBody>
                 </Table>
-                <div className="mt-4 flex justify-center">
+                <div className="grid grid-cols-1 mx-auto mt-4">
                   <Pagination>
                     {currentPage !== 1 && (
                       <PaginationPrevious
@@ -265,16 +293,22 @@ export default function EventsPage() {
                       />
                     )}
                     <PaginationContent>
-                      {Array.from({ length: totalPages }).map((_, i) => (
-                        <PaginationItem key={i}>
-                          <PaginationLink
-                            isActive={currentPage === i + 1}
-                            onClick={() => setCurrentPage(i + 1)}
-                          >
-                            {i + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
+                      {getPaginationItems(currentPage, totalPages).map(
+                        (item, idx) => (
+                          <PaginationItem key={idx}>
+                            {typeof item === "number" ? (
+                              <PaginationLink
+                                isActive={currentPage === item}
+                                onClick={() => setCurrentPage(item)}
+                              >
+                                {item}
+                              </PaginationLink>
+                            ) : (
+                              <span className="px-3 py-1">...</span>
+                            )}
+                          </PaginationItem>
+                        )
+                      )}
                     </PaginationContent>
                     {currentPage !== totalPages && (
                       <PaginationNext

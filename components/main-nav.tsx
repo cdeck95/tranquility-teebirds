@@ -105,16 +105,14 @@ export function MainNav() {
             <nav className="flex flex-col gap-2 mt-4">
               {navItems.map((item) => (
                 <Button
-                  asChild
                   key={item.href}
                   variant={pathname === item.href ? "secondary" : "ghost"}
                   className="w-full justify-start flex gap-2"
-                  disabled
                 >
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary pointer-events-none"
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                   >
                     <item.icon className="h-5 w-5" />
                     {item.title}

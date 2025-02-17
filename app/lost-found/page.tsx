@@ -18,7 +18,7 @@ export default function LostFoundPage() {
         </div>
 
         <Card className="max-w-2xl mx-auto">
-          <CardHeader className="text-;eft">
+          <CardHeader className="text-left">
             <div className="relative w-full h-16 sm:h-20 mb-6">
               <Image
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Logo%20Transparent-oozlRNUhrxlINd6nbuQyz1fuM8Tcw1.png"
