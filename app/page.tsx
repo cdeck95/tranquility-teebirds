@@ -10,7 +10,7 @@ export default function Home() {
     <>
       <section className="relative">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-background z-10" />
-        <div className="container relative z-20 py-12 md:py-24 lg:py-32 flex flex-col items-center text-center">
+        <div className="container mx-auto relative z-20 py-12 md:py-24 lg:py-32 flex flex-col items-center text-center">
           <AnimatedElement>
             <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 mb-6 sm:mb-8">
               <Image
@@ -50,7 +50,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="container py-8 sm:py-12 md:py-24 px-4 sm:px-6">
+      <section className="container mx-auto py-8 sm:py-12 md:py-24 px-4 sm:px-6">
         <div className="grid gap-4 sm:gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <AnimatedElement delay={0.2}>
             <Card className="flex flex-col justify-between items-center text-center p-4 sm:p-6 bg-accent rounded-lg h-42">

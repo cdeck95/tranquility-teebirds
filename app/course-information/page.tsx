@@ -5,7 +5,7 @@ import { SocialIcons } from "@/components/SocialIcons"; // New import
 
 export default function ContactPage() {
   return (
-    <div className="container py-8 sm:py-12 px-4 sm:px-6">
+    <div className="container mx-auto py-8 sm:py-12 px-4 sm:px-6">
       <div className="text-center mb-8 sm:mb-12">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter mb-4">
           Contact Us
