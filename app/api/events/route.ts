@@ -44,7 +44,7 @@ export async function GET() {
     const dateObj = new Date(currentYear, month - 1, day);
     const title = layout !== "" ? `${format} - ${layout}` : format;
     // Only insert non-empty values in the description.
-    let descriptionParts: string[] = [];
+    const descriptionParts: string[] = [];
     if (signUpStarts) {
       descriptionParts.push(`Sign up period starts: ${signUpStarts}`);
     }
