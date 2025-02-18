@@ -24,7 +24,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventItem } from "../api/events/route";
 import { format } from "date-fns";
-import { form } from "framer-motion/client";
 
 // Helper: Convert a Date instance to m/d/yyyy string for comparison
 const convertDateToMDY = (date: Date): string => {
