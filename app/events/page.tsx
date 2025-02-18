@@ -23,6 +23,7 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventItem } from "../api/events/route";
+import { format } from "date-fns";
 
 // Helper: Convert a Date instance to m/d/yyyy string for comparison
 const convertDateToMDY = (date: Date): string => {
@@ -178,6 +179,7 @@ export default function EventsPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Date</TableHead>
+                      <TableHead>Time</TableHead>
                       <TableHead>Event</TableHead>
                       <TableHead>Location</TableHead>
                     </TableRow>
@@ -186,6 +188,9 @@ export default function EventsPage() {
                     {paginatedEvents.map((event, index) => (
                       <TableRow key={index}>
                         <TableCell>{event.formattedDate}</TableCell>
+                        <TableCell>
+                          {format(event.dateTimestamp, "h:mm a")}
+                        </TableCell>
                         <TableCell>{event.title}</TableCell>
                         <TableCell>{event.location}</TableCell>
                       </TableRow>
