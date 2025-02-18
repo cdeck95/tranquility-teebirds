@@ -1,3 +1,5 @@
+"use server";
+
 import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
@@ -41,7 +43,14 @@ export async function GET() {
     const [dateStr, format, layout, location, regLink, signUpStarts, starts] =
       parts;
     const [month, day] = dateStr.split("/").map(Number);
-    const dateObj = new Date(currentYear, month - 1, day);
+    // Use Date.UTC so that the date is exactly the CSV date as EST (ignoring timezone issues)
+    const dateObj = new Date(Date.UTC(currentYear, month - 1, day));
+
+    console.log("dateStr", dateStr);
+    console.log("month", month);
+    console.log("day", day);
+    console.log("dateObj", dateObj);
+
     const title = layout !== "" ? `${format} - ${layout}` : format;
     // Only insert non-empty values in the description.
     const descriptionParts: string[] = [];

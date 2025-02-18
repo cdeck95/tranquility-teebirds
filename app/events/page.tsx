@@ -24,16 +24,25 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventItem } from "../api/events/route";
 
-// Helper: Format event dates (accepts a Date instance)
+// Helper: Format event dates using UTC getters to reflect the CSV (EST) date
 const formatEventDate = (eventDate: Date): string => {
-  const today = new Date();
-  const todayStart = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
+  // Extract the CSV date from UTC parts so that it reflects the intended EST date.
+  const month = eventDate.getUTCMonth() + 1;
+  const day = eventDate.getUTCDate();
+  const year = eventDate.getUTCFullYear();
+  // Compute today's date in EST by converting current time to Eastern Time.
+  const currentDateInEST = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
   );
-  if (eventDate.toDateString() === todayStart.toDateString()) return "Today";
-  return eventDate.toLocaleDateString();
+  const todayStartEST = new Date(
+    Date.UTC(
+      currentDateInEST.getFullYear(),
+      currentDateInEST.getMonth(),
+      currentDateInEST.getDate()
+    )
+  );
+  if (eventDate.getTime() === todayStartEST.getTime()) return "Today";
+  return `${month}/${day}/${year}`;
 };
 
 // Helper: Generate pagination items with ellipsis
@@ -77,22 +86,32 @@ export default function EventsPage() {
       });
   }, []);
 
-  // Compute upcoming events: filter events with a date >= today (using today's start), sort them and then take the first 3
-  const today = new Date();
-  const todayStart = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
+  // Compute today's date in EST for filtering upcoming events.
+  const currentDateInEST = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
+  );
+  const todayStartEST = new Date(
+    Date.UTC(
+      currentDateInEST.getFullYear(),
+      currentDateInEST.getMonth(),
+      currentDateInEST.getDate()
+    )
   );
   const upcomingEvents = events
-    .filter((event) => event.date >= todayStart)
+    .filter((event) => event.date >= todayStartEST)
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .slice(0, 3);
 
-  // Filter events based on selected date if available
+  // When filtering by selected date, compare using EST-based date strings.
   const filteredTableEvents = selectedDate
     ? events.filter(
-        (event) => event.date.toDateString() === selectedDate.toDateString()
+        (event) =>
+          event.date.toLocaleDateString("en-US", {
+            timeZone: "America/New_York",
+          }) ===
+          selectedDate.toLocaleDateString("en-US", {
+            timeZone: "America/New_York",
+          })
       )
     : events;
   const totalPages = Math.ceil(filteredTableEvents.length / itemsPerPage);
