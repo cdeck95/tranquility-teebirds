@@ -24,46 +24,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventItem } from "../api/events/route";
 
-// Helper: Format event dates using UTC getters to reflect the CSV (EST) date
-const formatEventDate = (eventDate: Date): string => {
-  // Extract the CSV date from UTC parts so that it reflects the intended EST date.
-  const month = eventDate.getUTCMonth() + 1;
-  const day = eventDate.getUTCDate();
-  const year = eventDate.getUTCFullYear();
-  // Compute today's date in EST by converting current time to Eastern Time.
-  const currentDateInEST = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
-  );
-  const todayStartEST = new Date(
-    Date.UTC(
-      currentDateInEST.getFullYear(),
-      currentDateInEST.getMonth(),
-      currentDateInEST.getDate()
-    )
-  );
-  if (eventDate.getTime() === todayStartEST.getTime()) return "Today";
-  return `${month}/${day}/${year}`;
+// Helper: Convert a Date instance to m/d/yyyy string for comparison
+const convertDateToMDY = (date: Date): string => {
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 };
-
-// Helper: Generate pagination items with ellipsis
-function getPaginationItems(
-  currentPage: number,
-  totalPages: number
-): (number | string)[] {
-  const pages: (number | string)[] = [];
-  if (totalPages <= 7) {
-    for (let i = 1; i <= totalPages; i++) pages.push(i);
-  } else {
-    pages.push(1);
-    if (currentPage > 4) pages.push("...");
-    const startPage = Math.max(2, currentPage - 1);
-    const endPage = Math.min(totalPages - 1, currentPage + 1);
-    for (let i = startPage; i <= endPage; i++) pages.push(i);
-    if (currentPage < totalPages - 3) pages.push("...");
-    pages.push(totalPages);
-  }
-  return pages;
-}
 
 export default function EventsPage() {
   // Client state for events, selected date, and pagination
@@ -77,12 +41,8 @@ export default function EventsPage() {
     fetch("/api/events")
       .then((res) => res.json())
       .then((data) => {
-        // Convert event.date strings back to Date objects
-        const parsedEvents = data.events.map((ev: EventItem) => ({
-          ...ev,
-          date: new Date(ev.date),
-        }));
-        setEvents(parsedEvents);
+        // Use events as provided, including formattedDate and timestamp
+        setEvents(data.events);
       });
   }, []);
 
@@ -90,38 +50,53 @@ export default function EventsPage() {
   const currentDateInEST = new Date(
     new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
   );
-  const todayStartEST = new Date(
-    Date.UTC(
-      currentDateInEST.getFullYear(),
-      currentDateInEST.getMonth(),
-      currentDateInEST.getDate()
-    )
-  );
+  const todayStartESTString = convertDateToMDY(currentDateInEST);
+
+  // Upcoming events: filter by comparing the formatted date string provided by the API.
   const upcomingEvents = events
-    .filter((event) => event.date >= todayStartEST)
-    .sort((a, b) => a.date.getTime() - b.date.getTime())
+    .filter(
+      (event) =>
+        event.formattedDate === todayStartESTString ||
+        event.dateTimestamp >=
+          new Date(currentDateInEST.setHours(0, 0, 0, 0)).getTime()
+    )
+    .sort((a, b) => a.dateTimestamp - b.dateTimestamp)
     .slice(0, 3);
 
-  // When filtering by selected date, compare using EST-based date strings.
+  // When filtering by selected date, compare using m/d/yyyy strings.
   const filteredTableEvents = selectedDate
     ? events.filter(
-        (event) =>
-          event.date.toLocaleDateString("en-US", {
-            timeZone: "America/New_York",
-          }) ===
-          selectedDate.toLocaleDateString("en-US", {
-            timeZone: "America/New_York",
-          })
+        (event) => event.formattedDate === convertDateToMDY(selectedDate)
       )
     : events;
   const totalPages = Math.ceil(filteredTableEvents.length / itemsPerPage);
   const paginatedEvents = filteredTableEvents
-    .sort((a, b) => a.date.getTime() - b.date.getTime())
+    .sort((a, b) => a.dateTimestamp - b.dateTimestamp)
     .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  // Disable dates where no event exists
+  // Disable dates where no event exists (using matching formatted dates)
   const calendarDisabled = (date: Date) =>
-    !events.some((event) => event.date.toDateString() === date.toDateString());
+    !events.some((event) => event.formattedDate === convertDateToMDY(date));
+
+  // Helper: Generate pagination items with ellipsis
+  function getPaginationItems(
+    currentPage: number,
+    totalPages: number
+  ): (number | string)[] {
+    const pages: (number | string)[] = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (currentPage > 4) pages.push("...");
+      const startPage = Math.max(2, currentPage - 1);
+      const endPage = Math.min(totalPages - 1, currentPage + 1);
+      for (let i = startPage; i <= endPage; i++) pages.push(i);
+      if (currentPage < totalPages - 3) pages.push("...");
+      pages.push(totalPages);
+    }
+    return pages;
+  }
 
   return (
     <div className="grid grid-cols-1 lg:container lg:mx-auto py-8 sm:py-12 px-4 sm:px-6">
@@ -150,7 +125,7 @@ export default function EventsPage() {
                   <div className="grid grid-cols-1 mb-4">
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <CalendarIcon className="h-4 w-4 flex-shrink-0" />
-                      <span>{formatEventDate(event.date)}</span>
+                      <span>{event.formattedDate}</span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <MapPin className="h-4 w-4 flex-shrink-0" />
@@ -194,7 +169,7 @@ export default function EventsPage() {
               <CardHeader>
                 <CardTitle>
                   {selectedDate
-                    ? `Events on ${formatEventDate(selectedDate)}`
+                    ? `Events on ${convertDateToMDY(selectedDate)}`
                     : "All Events"}
                 </CardTitle>
               </CardHeader>
@@ -210,7 +185,7 @@ export default function EventsPage() {
                   <TableBody>
                     {paginatedEvents.map((event, index) => (
                       <TableRow key={index}>
-                        <TableCell>{formatEventDate(event.date)}</TableCell>
+                        <TableCell>{event.formattedDate}</TableCell>
                         <TableCell>{event.title}</TableCell>
                         <TableCell>{event.location}</TableCell>
                       </TableRow>

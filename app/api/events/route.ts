@@ -7,7 +7,8 @@ import path from "path";
 // Define the event data structure
 export interface EventItem {
   title: string;
-  date: Date; // use Date object directly
+  dateTimestamp: number; // Unix timestamp computed from CSV date
+  formattedDate: string; // Pre-formatted date in m/d/yyyy (EST)
   location: string;
   description: string;
   registrationLink?: string;
@@ -45,6 +46,9 @@ export async function GET() {
     const [month, day] = dateStr.split("/").map(Number);
     // Use Date.UTC so that the date is exactly the CSV date as EST (ignoring timezone issues)
     const dateObj = new Date(Date.UTC(currentYear, month - 1, day));
+    // Pre-format date as m/d/yyyy (e.g., 3/8/2025)
+    const formattedDate = `${month}/${day}/${dateObj.getUTCFullYear()}`;
+    const timestamp = dateObj.getTime();
 
     console.log("dateStr", dateStr);
     console.log("month", month);
@@ -64,7 +68,8 @@ export async function GET() {
       descriptionParts.join(". ") + (descriptionParts.length ? "." : "");
     events.push({
       title,
-      date: dateObj, // use Date object directly
+      dateTimestamp: timestamp,
+      formattedDate,
       location: location || "Tranquility Trails, Woolwich, NJ",
       description,
       registrationLink: regLink || undefined,
