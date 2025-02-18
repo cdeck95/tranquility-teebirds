@@ -9,9 +9,25 @@ export interface EventItem {
   title: string;
   dateTimestamp: number; // Unix timestamp computed from CSV date
   formattedDate: string; // Pre-formatted date in m/d/yyyy (EST)
+  formattedCheckInPeriod?: string; // Pre-formatted check-in period in m/d/yyyy (EST)
+  formattedStartTime?: string; // Pre-formatted start time in HH:MM AM/PM (EST)
   location: string;
   description: string;
   registrationLink?: string;
+}
+
+// Helper: Add minutes to a time string (e.g., "9:15 AM") and return a formatted time string.
+function addMinutesToTime(
+  originalTimeString: string,
+  minutesToAdd: number
+): string {
+  const dateObject = new Date(`1970-01-01 ${originalTimeString}`);
+  dateObject.setMinutes(dateObject.getMinutes() + minutesToAdd);
+  const hours = dateObject.getHours();
+  const minutes = dateObject.getMinutes();
+  const period = hours >= 12 ? "PM" : "AM";
+  const hours12 = hours % 12 || 12;
+  return `${hours12}:${minutes < 10 ? "0" + minutes : minutes} ${period}`;
 }
 
 export async function GET() {
@@ -50,10 +66,17 @@ export async function GET() {
     const formattedDate = `${month}/${day}/${dateObj.getUTCFullYear()}`;
     const timestamp = dateObj.getTime();
 
-    console.log("dateStr", dateStr);
-    console.log("month", month);
-    console.log("day", day);
-    console.log("dateObj", dateObj);
+    // Compute check-in period: add 30 minutes to signUpStarts if available.
+    let formattedCheckInPeriod: string | undefined = undefined;
+    if (signUpStarts) {
+      formattedCheckInPeriod = `${signUpStarts} - ${addMinutesToTime(
+        signUpStarts,
+        30
+      )}`;
+    }
+
+    // Use starts for the event start time.
+    const formattedStartTime = starts ? starts : undefined;
 
     const title = layout !== "" ? `${format} - ${layout}` : format;
     // Only insert non-empty values in the description.
@@ -70,6 +93,8 @@ export async function GET() {
       title,
       dateTimestamp: timestamp,
       formattedDate,
+      formattedCheckInPeriod, // New property for check-in period
+      formattedStartTime, // New property for start time
       location: location || "Tranquility Trails, Woolwich, NJ",
       description,
       registrationLink: regLink || undefined,

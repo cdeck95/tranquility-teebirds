@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MapPin, CalendarIcon } from "lucide-react";
+import { MapPin, CalendarIcon, Clock } from "lucide-react";
 import { AnimatedElement } from "@/components/animated-element";
 import {
   Table,
@@ -24,6 +24,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventItem } from "../api/events/route";
 import { format } from "date-fns";
+import { form } from "framer-motion/client";
 
 // Helper: Convert a Date instance to m/d/yyyy string for comparison
 const convertDateToMDY = (date: Date): string => {
@@ -129,6 +130,10 @@ export default function EventsPage() {
                       <span>{event.formattedDate}</span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
+                      <Clock className="h-4 w-4 flex-shrink-0" />
+                      <span>{format(event.dateTimestamp, "h:mm a")}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <MapPin className="h-4 w-4 flex-shrink-0" />
                       <span>{event.location}</span>
                     </div>
@@ -179,7 +184,8 @@ export default function EventsPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Date</TableHead>
-                      <TableHead>Time</TableHead>
+                      <TableHead>Start Time</TableHead>
+                      <TableHead>Check In</TableHead>
                       <TableHead>Event</TableHead>
                       <TableHead>Location</TableHead>
                     </TableRow>
@@ -188,8 +194,9 @@ export default function EventsPage() {
                     {paginatedEvents.map((event, index) => (
                       <TableRow key={index}>
                         <TableCell>{event.formattedDate}</TableCell>
+                        <TableCell>{event.formattedStartTime || "-"}</TableCell>
                         <TableCell>
-                          {format(event.dateTimestamp, "h:mm a")}
+                          {event.formattedCheckInPeriod || "-"}
                         </TableCell>
                         <TableCell>{event.title}</TableCell>
                         <TableCell>{event.location}</TableCell>
