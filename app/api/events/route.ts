@@ -12,7 +12,6 @@ export interface EventItem {
   formattedCheckInPeriod?: string; // Pre-formatted check-in period in m/d/yyyy (EST)
   formattedStartTime?: string; // Pre-formatted start time in HH:MM AM/PM (EST)
   location: string;
-  description: string;
   registrationLink?: string;
 }
 
@@ -80,15 +79,7 @@ export async function GET() {
 
     const title = layout !== "" ? `${format} - ${layout}` : format;
     // Only insert non-empty values in the description.
-    const descriptionParts: string[] = [];
-    if (signUpStarts) {
-      descriptionParts.push(`Sign up period starts: ${signUpStarts}`);
-    }
-    if (starts) {
-      descriptionParts.push(`Starts: ${starts}`);
-    }
-    const description =
-      descriptionParts.join(". ") + (descriptionParts.length ? "." : "");
+
     events.push({
       title,
       dateTimestamp: timestamp,
@@ -96,7 +87,6 @@ export async function GET() {
       formattedCheckInPeriod, // New property for check-in period
       formattedStartTime, // New property for start time
       location: location || "Tranquility Trails, Woolwich, NJ",
-      description,
       registrationLink: regLink || undefined,
     });
   }

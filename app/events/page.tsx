@@ -24,6 +24,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventItem } from "../api/events/route";
 import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
 
 // Helper: Convert a Date instance to m/d/yyyy string for comparison
 const convertDateToMDY = (date: Date): string => {
@@ -120,7 +121,12 @@ export default function EventsPage() {
             {upcomingEvents.map((event, index) => (
               <Card key={index} className="bg-accent shadow-md">
                 <CardHeader>
-                  <CardTitle>{event.title}</CardTitle>
+                  <CardTitle className="flex flex-row justify-between">
+                    {event.title}
+                    {event.registrationLink && (
+                      <Badge variant="default">Tournament</Badge>
+                    )}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 mb-4">
@@ -137,10 +143,20 @@ export default function EventsPage() {
                       <span>{event.location}</span>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-700">{event.description}</p>
+                  {event.formattedCheckInPeriod && (
+                    <p className="text-sm text-muted-foreground">
+                      Sign ups: {event.formattedCheckInPeriod}
+                    </p>
+                  )}
+                  {event.formattedStartTime && (
+                    <p className="text-sm text-muted-foreground">
+                      Start: {event.formattedStartTime}
+                    </p>
+                  )}
+
                   {event.registrationLink && (
                     <div className="mt-4">
-                      <Button asChild variant="default" size="sm">
+                      <Button asChild variant="secondary" size="sm">
                         <Link href={event.registrationLink} target="_blank">
                           Register
                         </Link>
