@@ -25,10 +25,10 @@ export default async function RootLayout({
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   };
 
-  // Fetch events from the API route (server action) using an absolute URL
+  // Fetch events from the API route (server action) using an absolute URL without caching
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const res = await fetch(new URL("/api/events", baseUrl), {
-    next: { revalidate: 60 },
+    next: { revalidate: 0 }, // disable caching to load new CSV updates immediately
   });
   console.log("response", res);
   const data = await res.json();
@@ -73,10 +73,11 @@ export default async function RootLayout({
                 color: "white",
                 padding: "8px",
                 textAlign: "center",
-                fontSize: "1.25rem",
               }}
             >
-              Event in progress today, {todayString}
+              <p className="text-xl font-semibold">
+                Event in progress today, {todayString}
+              </p>
             </div>
           )}
           {upcomingEvent && !hasOngoingEvent && (
@@ -86,10 +87,11 @@ export default async function RootLayout({
                 color: "black",
                 padding: "8px",
                 textAlign: "center",
-                fontSize: "1.25rem",
               }}
             >
-              Upcoming event on {upcomingEvent.formattedDate}
+              <p className="text-xl font-semibold">
+                Upcoming event on {upcomingEvent.formattedDate}
+              </p>
             </div>
           )}
           {children}
