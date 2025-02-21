@@ -66,7 +66,7 @@ export default async function RootLayout({
     <html lang="en" className="h-full">
       <body className={cn(inter.className, "min-h-full flex flex-col")}>
         <MainNav />
-        <Analytics />
+
         <main className="flex-1">
           {hasOngoingEvent && (
             <div
@@ -98,6 +98,7 @@ export default async function RootLayout({
           )}
           {children}
         </main>
+        <Analytics />
         <footer className="bg-muted">
           <div className="container mx-auto px-4 py-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
