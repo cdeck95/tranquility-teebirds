@@ -7,6 +7,7 @@ import type React from "react"; // Added import for React
 import Link from "next/link";
 import { SocialIcons } from "@/components/SocialIcons";
 import { EventItem } from "./api/events/route";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -65,6 +66,7 @@ export default async function RootLayout({
     <html lang="en" className="h-full">
       <body className={cn(inter.className, "min-h-full flex flex-col")}>
         <MainNav />
+        <Analytics />
         <main className="flex-1">
           {hasOngoingEvent && (
             <div
