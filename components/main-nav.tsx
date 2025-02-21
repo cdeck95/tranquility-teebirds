@@ -84,14 +84,16 @@ export function MainNav() {
           {navItems.map((item) => (
             <Button
               key={item.href}
-              variant="ghost"
+              variant={pathname === item.href ? "secondary" : "ghost"}
               asChild
               onClick={() => router.push(item.href)}
             >
               {/* <Link href={item.href}> */}
-              <item.icon className="h-4 w-4 mr-2" />
-              {/* {item.title}
-              </Link> */}
+              <div className="flex items-center gap-2">
+                <item.icon className="h-4 w-4 mr-2" />
+                {item.title}
+              </div>
+              {/* </Link>  */}
             </Button>
           ))}
         </nav>
