@@ -7,7 +7,7 @@ import type React from "react"; // Added import for React
 import Link from "next/link";
 import { SocialIcons } from "@/components/SocialIcons";
 import { EventItem } from "./api/events/route";
-import { Analytics } from "@vercel/analytics/react";
+// import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
