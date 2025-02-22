@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Mail, Link as LinkIcon } from "lucide-react";
-import InteractiveUdiscFrame from "@/components/InteractiveUdiscFrame";
+// import InteractiveUdiscFrame from "@/components/InteractiveUdiscFrame";
 import { SocialIcons } from "@/components/SocialIcons"; // New import
 import { AnimatedElement } from "@/components/animated-element";
 
@@ -56,9 +56,7 @@ export default function ContactPage() {
             <CardHeader>
               <CardTitle>UDisc Course Page</CardTitle>
             </CardHeader>
-            <CardContent>
-              <InteractiveUdiscFrame />
-            </CardContent>
+            <CardContent>{/* <InteractiveUdiscFrame /> */}</CardContent>
           </Card>
         </div>
       </div>

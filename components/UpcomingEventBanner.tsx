@@ -1,3 +1,5 @@
+"use client";
+
 import { EventItem } from "@/app/api/events/route";
 import React from "react";
 
