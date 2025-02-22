@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 import type React from "react"; // Added import for React
 import Link from "next/link";
 import { SocialIcons } from "@/components/SocialIcons";
-// import { EventItem } from "./api/events/route";
 import { Analytics } from "@vercel/analytics/react";
+import UpcomingEventBanner from "@/components/UpcomingEventBanner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,81 +21,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // // Helper: Convert a Date to m/d/yyyy in EST
-  // const convertDateToMDY = (date: Date): string => {
-  //   return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
-  // };
-
-  // // Fetch events from the API route (server action) using an absolute URL without caching
-  // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  // const res = await fetch(new URL("/api/events", baseUrl), {
-  //   next: { revalidate: 0 }, // disable caching to load new CSV updates immediately
-  // });
-  // console.log("response", res);
-  // const data = await res.json();
-  // console.log("data", data);
-  // const events = data.events;
-  // console.log("events", events);
-
-  // // Compute today's date in EST
-  // const currentDateInEST = new Date(
-  //   new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
-  // );
-  // console.log("currentDateInEST", currentDateInEST);
-  // const todayString = convertDateToMDY(currentDateInEST);
-  // console.log("todayString", todayString);
-
-  // // Check if any event is scheduled for today
-  // const hasOngoingEvent = events.some(
-  //   (event: { formattedDate: string }) => event.formattedDate === todayString
-  // );
-  // console.log("hasOngoingEvent", hasOngoingEvent);
-
-  // // Determine the upcoming event within 3 days, if any
-  // const upcomingEvent: EventItem = events.find(
-  //   (event: { dateTimestamp: number }) => {
-  //     const eventDate = new Date(event.dateTimestamp);
-  //     const timeDifferenceInMilliseconds =
-  //       eventDate.getTime() - currentDateInEST.getTime();
-  //     const diffDays = timeDifferenceInMilliseconds / (1000 * 3600 * 24);
-  //     return diffDays >= 0 && diffDays <= 3;
-  //   }
-  // );
-
   return (
     <html lang="en" className="h-full">
       <body className={cn(inter.className, "min-h-full flex flex-col")}>
         <MainNav />
-
+        <UpcomingEventBanner />
         <main className="flex-1">
-          {/* {hasOngoingEvent && (
-            <div
-              style={{
-                backgroundColor: "red",
-                color: "white",
-                padding: "8px",
-                textAlign: "center",
-              }}
-            >
-              <p className="text-xl font-semibold">
-                Event in progress today, {todayString}
-              </p>
-            </div>
-          )}
-          {upcomingEvent && !hasOngoingEvent && (
-            <div
-              style={{
-                backgroundColor: "yellow",
-                color: "black",
-                padding: "8px",
-                textAlign: "center",
-              }}
-            >
-              <p className="text-xl font-semibold">
-                Upcoming event on {upcomingEvent.formattedDate}
-              </p>
-            </div>
-          )} */}
           {children}
           <Analytics />
         </main>
