@@ -17,10 +17,11 @@ const fetchTeamEvents = async (): Promise<EventItem[]> => {
   const response = await fetch(new URL("/api/events", baseUrl), {
     next: { revalidate: 60 },
   });
+  const responseJson = await response.json();
+  console.log("responseJson", responseJson);
   if (!response.ok) {
     throw new Error("Failed to fetch events");
   }
-  const responseJson = await response.json();
   return responseJson.events;
 };
 
@@ -41,6 +42,7 @@ export default function UpcomingEventBanner() {
         const events = await fetchTeamEvents();
         setTeamEvents(events);
       } catch (err) {
+        console.log("Error fetching events", err);
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setIsLoading(false);
