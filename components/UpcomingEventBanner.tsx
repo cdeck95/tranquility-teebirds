@@ -74,6 +74,10 @@ export default function UpcomingEventBanner() {
     return differenceInDays >= 0 && differenceInDays <= 3;
   });
 
+  if (!isEventOngoingToday && !upcomingTeamEvent) {
+    return null;
+  }
+
   return (
     <div>
       {/* Show banner if an event is ongoing today */}
