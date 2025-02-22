@@ -13,7 +13,7 @@ function convertDateToMDY(dateObj: Date): string {
 // Client-side fetch function
 const fetchTeamEvents = async (): Promise<EventItem[]> => {
   const baseUrl: string =
-    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.tranquilityteebirds.com";
   const response = await fetch(new URL("/api/events", baseUrl), {
     next: { revalidate: 60 },
   });
