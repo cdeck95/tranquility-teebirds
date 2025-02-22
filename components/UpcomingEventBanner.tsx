@@ -9,7 +9,7 @@ function convertDateToMDY(dateObj: Date): string {
 }
 
 // Server action: fetch events from the API
-async function fetchTeamEvents(): Promise<any> {
+async function fetchTeamEvents(): Promise<EventItem[]> {
   // Construct base URL from environment or fallback
   const baseUrl: string =
     process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
@@ -17,18 +17,15 @@ async function fetchTeamEvents(): Promise<any> {
   const response = await fetch(new URL("/api/events", baseUrl), {
     next: { revalidate: 60 },
   });
-  // Debug: log response status if needed
-  // console.log("response", response);
-  return response.json();
+  const responseJson = await response.json();
+  const events: EventItem[] = responseJson.events;
+  return events;
 }
 
 // UpcomingEventBanner component to display upcoming events for Tranquility Teebirds
 export default async function UpcomingEventBanner() {
   // Retrieve events using the server action
-  const eventData = await fetchTeamEvents();
-  // Debug: log received data if needed
-  // console.log("eventData", eventData);
-  const teamEvents = eventData.events;
+  const teamEvents = await fetchTeamEvents();
 
   // Compute today's date in EST using verbose naming
   const currentDateInEST: Date = new Date(

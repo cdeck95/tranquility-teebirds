@@ -15,6 +15,11 @@ export interface EventItem {
   registrationLink?: string;
 }
 
+// Define the response structure
+interface EventsResponse {
+  events: EventItem[];
+}
+
 // Helper: Add minutes to a time string (e.g., "9:15 AM") and return a formatted time string.
 function addMinutesToTime(
   originalTimeString: string,
@@ -29,7 +34,7 @@ function addMinutesToTime(
   return `${hours12}:${minutes < 10 ? "0" + minutes : minutes} ${period}`;
 }
 
-export async function GET() {
+export async function GET(): Promise<NextResponse<EventsResponse>> {
   // Read the CSV file
   const csvPath = path.join(
     process.cwd(),
