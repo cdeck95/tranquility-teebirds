@@ -23,7 +23,6 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { EventItem } from "../api/events/route";
-import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 
 // Helper: Convert a Date instance to m/d/yyyy string for comparison
