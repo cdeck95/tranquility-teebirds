@@ -35,6 +35,9 @@ export default function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [currentPage, setCurrentPage] = useState(1);
+  const [nextUpcomingEventIndex, setNextUpcomingEventIndex] = useState<
+    number | null
+  >(null);
   const itemsPerPage = 5;
 
   // Fetch events from the API route on mount
@@ -46,6 +49,34 @@ export default function EventsPage() {
         setEvents(data.events);
       });
   }, []);
+
+  // Effect to automatically navigate to the page with the next upcoming event
+  useEffect(() => {
+    if (events.length > 0 && !selectedDate) {
+      // Compute today's date in EST for finding the next upcoming event
+      const currentDateInEST = new Date(
+        new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
+      );
+      const todayTimestamp = new Date(
+        currentDateInEST.setHours(0, 0, 0, 0)
+      ).getTime();
+
+      // Sort all events by timestamp and find the next upcoming event
+      const sortedEvents = [...events].sort(
+        (a, b) => a.dateTimestamp - b.dateTimestamp
+      );
+      const nextEventIndex = sortedEvents.findIndex(
+        (event) => event.dateTimestamp >= todayTimestamp
+      );
+
+      if (nextEventIndex !== -1) {
+        // Calculate which page contains the next upcoming event
+        const targetPage = Math.floor(nextEventIndex / itemsPerPage) + 1;
+        setCurrentPage(targetPage);
+        setNextUpcomingEventIndex(nextEventIndex);
+      }
+    }
+  }, [events, selectedDate, itemsPerPage]);
 
   // Compute today's date in EST for filtering upcoming events.
   const currentDateInEST = new Date(
@@ -63,17 +94,45 @@ export default function EventsPage() {
     )
     .sort((a, b) => a.dateTimestamp - b.dateTimestamp)
     .slice(0, 3);
-
   // When filtering by selected date, compare using m/d/yyyy strings.
   const filteredTableEvents = selectedDate
     ? events.filter(
         (event) => event.formattedDate === convertDateToMDY(selectedDate)
       )
     : events;
-  const totalPages = Math.ceil(filteredTableEvents.length / itemsPerPage);
-  const paginatedEvents = filteredTableEvents
-    .sort((a, b) => a.dateTimestamp - b.dateTimestamp)
-    .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  // Sort filtered events by timestamp for consistent ordering
+  const sortedFilteredEvents = filteredTableEvents.sort(
+    (a, b) => a.dateTimestamp - b.dateTimestamp
+  );
+
+  const totalPages = Math.ceil(sortedFilteredEvents.length / itemsPerPage);
+  const paginatedEvents = sortedFilteredEvents.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Function to determine if a row should be highlighted (next upcoming event)
+  const isNextUpcomingEvent = (event: EventItem): boolean => {
+    if (selectedDate || nextUpcomingEventIndex === null) return false;
+
+    const currentDateInEST = new Date(
+      new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
+    );
+    const todayTimestamp = new Date(
+      currentDateInEST.setHours(0, 0, 0, 0)
+    ).getTime();
+
+    // Find the next upcoming event in the sorted events
+    const nextUpcomingEvent = events
+      .sort((a, b) => a.dateTimestamp - b.dateTimestamp)
+      .find((e) => e.dateTimestamp >= todayTimestamp);
+
+    return nextUpcomingEvent
+      ? event.dateTimestamp === nextUpcomingEvent.dateTimestamp &&
+          event.title === nextUpcomingEvent.title
+      : false;
+  };
 
   // Disable dates where no event exists (using matching formatted dates)
   const calendarDisabled = (date: Date) =>
@@ -183,15 +242,50 @@ export default function EventsPage() {
               }}
               className="rounded-md mx-auto border max-w-[250px] max-h-[325px] shadow-md"
               disabled={calendarDisabled}
-            />
-
+            />{" "}
             <Card className="shadow-md">
               <CardHeader>
-                <CardTitle>
-                  {selectedDate
-                    ? `Events on ${convertDateToMDY(selectedDate)}`
-                    : "All Events"}
-                </CardTitle>
+                <div className="flex flex-row justify-between items-center">
+                  <CardTitle>
+                    {selectedDate
+                      ? `Events on ${convertDateToMDY(selectedDate)}`
+                      : "All Events"}
+                  </CardTitle>{" "}
+                  {!selectedDate && nextUpcomingEventIndex !== null && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        // Navigate to the page containing the next upcoming event
+                        const targetPage =
+                          Math.floor(nextUpcomingEventIndex / itemsPerPage) + 1;
+                        setCurrentPage(targetPage);
+                      }}
+                      className="text-xs"
+                    >
+                      Jump to Next Event
+                    </Button>
+                  )}
+                  {selectedDate && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedDate(undefined);
+                        // Auto-navigate back to next upcoming event page
+                        if (nextUpcomingEventIndex !== null) {
+                          const targetPage =
+                            Math.floor(nextUpcomingEventIndex / itemsPerPage) +
+                            1;
+                          setCurrentPage(targetPage);
+                        }
+                      }}
+                      className="text-xs"
+                    >
+                      Clear Date Filter
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -203,17 +297,57 @@ export default function EventsPage() {
                       <TableHead>Event</TableHead>
                       <TableHead>Location</TableHead>
                     </TableRow>
-                  </TableHeader>
+                  </TableHeader>{" "}
                   <TableBody>
                     {paginatedEvents.map((event, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{event.formattedDate}</TableCell>
-                        <TableCell>{event.formattedStartTime || "-"}</TableCell>
-                        <TableCell>
+                      <TableRow
+                        key={index}
+                        className={
+                          isNextUpcomingEvent(event)
+                            ? "bg-blue-50 dark:bg-blue-950/20 border-l-4 border-l-blue-500"
+                            : ""
+                        }
+                      >
+                        <TableCell
+                          className={
+                            isNextUpcomingEvent(event) ? "font-semibold" : ""
+                          }
+                        >
+                          {event.formattedDate}
+                        </TableCell>
+                        <TableCell
+                          className={
+                            isNextUpcomingEvent(event) ? "font-semibold" : ""
+                          }
+                        >
+                          {event.formattedStartTime || "-"}
+                        </TableCell>
+                        <TableCell
+                          className={
+                            isNextUpcomingEvent(event) ? "font-semibold" : ""
+                          }
+                        >
                           {event.formattedCheckInPeriod || "-"}
                         </TableCell>
-                        <TableCell>{event.title}</TableCell>
-                        <TableCell>{event.location}</TableCell>
+                        <TableCell
+                          className={
+                            isNextUpcomingEvent(event) ? "font-semibold" : ""
+                          }
+                        >
+                          {event.title}
+                          {isNextUpcomingEvent(event) && (
+                            <Badge variant="secondary" className="ml-2 text-xs">
+                              Next Event
+                            </Badge>
+                          )}
+                        </TableCell>
+                        <TableCell
+                          className={
+                            isNextUpcomingEvent(event) ? "font-semibold" : ""
+                          }
+                        >
+                          {event.location}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
