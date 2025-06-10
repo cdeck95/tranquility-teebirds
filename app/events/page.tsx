@@ -136,7 +136,7 @@ export default function EventsPage() {
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <Clock className="h-4 w-4 flex-shrink-0" />
-                      <span>{format(event.dateTimestamp, "h:mm a")}</span>
+                      <span>{event.formattedStartTime}</span>
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <MapPin className="h-4 w-4 flex-shrink-0" />
@@ -148,11 +148,11 @@ export default function EventsPage() {
                       Sign ups: {event.formattedCheckInPeriod}
                     </p>
                   )}
-                  {event.formattedStartTime && (
+                  {/* {event.formattedStartTime && (
                     <p className="text-sm text-muted-foreground">
                       Start: {event.formattedStartTime}
                     </p>
-                  )}
+                  )} */}
 
                   {event.registrationLink && (
                     <div className="mt-4">
